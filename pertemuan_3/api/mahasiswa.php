@@ -11,9 +11,9 @@ if (isset($_GET['id'])) {
                  m.nama, 
                  m.nim,
                  j.nama_jurusan AS jurusan 
-          FROM mahasiswa m 
-          LEFT JOIN jurusan j ON m.jurusan_id = j.id
-          WHERE m.id = '$id'";
+                FROM mahasiswa m 
+                LEFT JOIN jurusan j ON m.jurusan_id = j.id
+                WHERE m.id = '$id'";
 
     $r = mysqli_query($koneksi, $q);
 
@@ -25,7 +25,6 @@ if (isset($_GET['id'])) {
             500
         );
     }
-
 
     $data = mysqli_fetch_assoc($r);
 
@@ -39,7 +38,7 @@ if (isset($_GET['id'])) {
     }
 
 
-    sendResponse(true, "berhasil", $r, 200);
+    sendResponse(true, "berhasil", $data, 200);
 }
 
 //search
@@ -74,12 +73,12 @@ if (isset($_GET['search'])) {
         $data[] = $row;
     }
 
-        sendResponse(true, "berhasil", $data, 200);
+    sendResponse(true, "berhasil", $data, 200);
 }
 
 //pagination
-if (isset($_GET['page']) && isset($_GET['limit'])) {
-    
+if (isset($_GET['page']) || isset($_GET['limit'])) {
+
     $page = isset($_GET['page'])
         ? (int)$_GET['page']
         : 1;
@@ -88,13 +87,13 @@ if (isset($_GET['page']) && isset($_GET['limit'])) {
         ? (int)$_GET['limit']
         : 10;
 
-        if ($page < 1) {
-            $page = 1;
-        }
+    if ($page < 1) {
+        $page = 1;
+    }
 
-        if ($limit < 1) {
-            $limit = 10;
-        }
+    if ($limit < 1) {
+        $limit = 10;
+    }
 
     $offset = ($page - 1) * $limit;
 
@@ -108,6 +107,7 @@ if (isset($_GET['page']) && isset($_GET['limit'])) {
                 ON m.jurusan_id = j.id
                 ORDER BY m.id DESC
                 LIMIT $limit OFFSET $offset";
+                // ini integer, tidak perlu ''
 
     $r = mysqli_query($koneksi, $q);
 
@@ -126,5 +126,5 @@ if (isset($_GET['page']) && isset($_GET['limit'])) {
         $data[] = $row;
     }
 
-        sendResponse(true, "berhasil", $data, 200);
+    sendResponse(true, "berhasil", $data, 200);
 }
