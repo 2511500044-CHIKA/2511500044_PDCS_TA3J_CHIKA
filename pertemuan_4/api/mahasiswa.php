@@ -134,12 +134,14 @@ switch ($method) {
             }
 
             sendResponse(true, "berhasil", $data, 200);
+        }
+
          break;
     case 'POST':
         // post disini
         $input = json_decode(file_get_contents('php://input'), true);
         //cek apakah  nim, nama dan jurusan_id ada?
-        if(  $input || !isset($input['nama']) || !isset($input['nim'])  || !isset($input['jurusan_id']) ){
+        if(  !$input || !isset($input['nama']) || !isset($input['nim'])  || !isset($input['jurusan_id']) ){
             sendResponse(false, "field nama, nim, jurusan_id tidak boleh kosong", null, 400);
         }
 
@@ -161,17 +163,18 @@ switch ($method) {
         }
 
         // insert data
-        $q = "INSERT INTO mahasiswa (nama,nim,jurusa_id,created_at) VALUE ('$nama', '$nim', '$jurusan_id', CURDATE())";
+        $q = "INSERT INTO mahasiswa (nama,nim,jurusan_id,created_at) VALUES ('$nama', '$nim', '$jurusan_id', CURDATE())";
 
         if(mysqli_query($koneksi, $q)) {
             sendResponse(true, "data tersimpan", ["id" => mysqli_insert_id($koneksi)], 201);
         } else {
-            sendResponse(false, mysql_error($koneski), null, 500);
+            sendResponse(false, mysqli_error($koneksi), null, 500);
         }
 
         break;
+        //put & delete
     default:
-        sendResponse(false, "method no allownd", null, 405);
+        sendResponse(false, "method not allowed", null, 405);
         break;
     }
 
