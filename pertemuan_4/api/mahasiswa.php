@@ -10,6 +10,7 @@ switch ($method) {
         // get disini
         // GET ny ID 
         // url: mahasiswa.php?id=[id]
+        
         if (isset($_GET['id'])) {
             //dimulai dari sini
             $id = $_GET['id'];
